@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Places Viewer
 
-## Getting Started
+A modern web interface for displaying Google Places data with multiple view modes.
 
-First, run the development server:
+## Features
+
+- **Cards View**: Visual grid of business cards with ratings, opening hours, and contact info
+- **Table View**: Sortable, filterable data table with pagination
+- **Map View**: Interactive map with markers for all locations
+- **Search & Filter**: Search by name/address, filter by category and neighborhood
+
+## Quick Start
 
 ```bash
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Build static export
+npm run build
 
-## Learn More
+# The output will be in the `out` directory
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Deploy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The `out` directory contains static HTML/CSS/JS files that can be deployed anywhere:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Vercel (Recommended)
+```bash
+# Install Vercel CLI
+npm i -g vercel
 
-## Deploy on Vercel
+# Deploy
+vercel
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Netlify
+1. Drag and drop the `out` folder to [netlify.com/drop](https://app.netlify.com/drop)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### GitHub Pages
+1. Push the `out` folder contents to a `gh-pages` branch
+2. Enable GitHub Pages in repository settings
+
+### Any Static Host
+Upload the contents of the `out` directory to:
+- Amazon S3
+- Cloudflare Pages
+- Firebase Hosting
+- Any web server (Apache, Nginx, etc.)
+
+## Updating Data
+
+Replace `src/data/places.json` with your new Google Places data and rebuild:
+
+```bash
+cp your-new-data.json src/data/places.json
+npm run build
+```
+
+## Tech Stack
+
+- **Next.js 16** - React framework with static export
+- **shadcn/ui** - UI components
+- **TanStack Table** - Data table with sorting/filtering
+- **React Leaflet** - Interactive maps
+- **Tailwind CSS** - Styling
+- **TypeScript** - Type safety
