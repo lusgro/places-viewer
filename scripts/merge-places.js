@@ -31,20 +31,40 @@ function loadJson(filepath) {
   }
 }
 
+function normalizePlace(place) {
+  if (place.instagrams?.length && !place.instagramUrl) {
+    place.instagramUrl = place.instagrams[0];
+  }
+  if (place.facebooks?.length && !place.facebookUrl) {
+    place.facebookUrl = place.facebooks[0];
+  }
+  if (place.twitters?.length && !place.twitterUrl) {
+    place.twitterUrl = place.twitters[0];
+  }
+  return place;
+}
+
 function mergePlaces(files) {
   const placeMap = new Map();
   let totalRaw = 0;
   let duplicatesSkipped = 0;
   let duplicatesUpdated = 0;
+  let socialNormalized = 0;
 
   for (const file of files) {
     const places = loadJson(file);
     totalRaw += places.length;
 
-    for (const place of places) {
+    for (let place of places) {
       if (!place.placeId) {
         console.warn(`⚠ Skipping place without placeId: ${place.title || 'unknown'}`);
         continue;
+      }
+
+      const hadNoSocial = !place.instagramUrl && !place.facebookUrl;
+      place = normalizePlace(place);
+      if (hadNoSocial && (place.instagramUrl || place.facebookUrl)) {
+        socialNormalized++;
       }
 
       const existing = placeMap.get(place.placeId);
@@ -65,6 +85,8 @@ function mergePlaces(files) {
       }
     }
   }
+
+  console.log(`Social links normalized: ${socialNormalized}`);
 
   const merged = Array.from(placeMap.values());
   
