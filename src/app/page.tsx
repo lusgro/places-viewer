@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Place } from "@/types/place";
 import placesData from "@/data/places.json";
@@ -52,22 +52,37 @@ function getAllNeighborhoods(places: Place[]): string[] {
   return Array.from(neighborhoodsSet).sort();
 }
 
+function normalizeText(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedNeighborhoods, setSelectedNeighborhoods] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState("cards");
+  const [scrapedDate, setScrapedDate] = useState<string>("");
 
   const allCategories = useMemo(() => getAllCategories(places), []);
   const allNeighborhoods = useMemo(() => getAllNeighborhoods(places), []);
 
+  useEffect(() => {
+    if (places[0]?.scrapedAt) {
+      setScrapedDate(new Date(places[0].scrapedAt).toLocaleDateString("es-AR"));
+    }
+  }, []);
+
   const filteredPlaces = useMemo(() => {
+    const normalizedQuery = normalizeText(searchQuery);
     return places.filter((place) => {
       const matchesSearch =
         searchQuery === "" ||
-        place.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        place.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        place.description?.toLowerCase().includes(searchQuery.toLowerCase());
+        normalizeText(place.title).includes(normalizedQuery) ||
+        normalizeText(place.address).includes(normalizedQuery) ||
+        (place.description && normalizeText(place.description).includes(normalizedQuery));
 
       const matchesCategory =
         selectedCategories.length === 0 ||
@@ -245,8 +260,8 @@ export default function Home() {
 
       <footer className="border-t bg-card py-4">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          Datos de Google Places · {places.length} lugares ·{" "}
-          {new Date(places[0]?.scrapedAt || "").toLocaleDateString("es-AR")}
+          Datos de Google Places · {places.length} lugares
+          {scrapedDate && ` · ${scrapedDate}`}
         </div>
       </footer>
     </div>

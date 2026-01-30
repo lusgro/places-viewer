@@ -34,6 +34,13 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
+function normalizeText(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
 interface PlacesTableProps {
   data: Place[];
 }
@@ -187,6 +194,19 @@ export function PlacesTable({ data }: PlacesTableProps) {
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: (row, _columnId, filterValue) => {
+      const search = normalizeText(String(filterValue));
+      const title = normalizeText(row.original.title || "");
+      const category = normalizeText(row.original.categoryName || "");
+      const neighborhood = normalizeText(row.original.neighborhood || "");
+      const address = normalizeText(row.original.address || "");
+      return (
+        title.includes(search) ||
+        category.includes(search) ||
+        neighborhood.includes(search) ||
+        address.includes(search)
+      );
+    },
     state: {
       sorting,
       columnFilters,
