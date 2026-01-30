@@ -60,4 +60,7 @@ export interface Place {
   isAdvertisement?: boolean;
   imageUrl?: string;
   kgmid?: string;
+  instagramUrl?: string | null;
+  facebookUrl?: string | null;
+  twitterUrl?: string | null;
 }

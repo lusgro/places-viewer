@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Raw scrape files
+dataset_crawler-*.json
+src/data/*.backup.json

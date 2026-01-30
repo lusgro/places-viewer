@@ -31,6 +31,8 @@ import {
   Globe,
   ChevronLeft,
   ChevronRight,
+  Instagram,
+  Facebook,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -170,6 +172,20 @@ const columns: ColumnDef<Place>[] = [
             <Button variant="ghost" size="icon" asChild>
               <a href={place.url} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="h-4 w-4" />
+              </a>
+            </Button>
+          )}
+          {place.instagramUrl && (
+            <Button variant="ghost" size="icon" asChild>
+              <a href={place.instagramUrl} target="_blank" rel="noopener noreferrer">
+                <Instagram className="h-4 w-4" />
+              </a>
+            </Button>
+          )}
+          {place.facebookUrl && (
+            <Button variant="ghost" size="icon" asChild>
+              <a href={place.facebookUrl} target="_blank" rel="noopener noreferrer">
+                <Facebook className="h-4 w-4" />
               </a>
             </Button>
           )}

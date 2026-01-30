@@ -19,6 +19,8 @@ import {
   ExternalLink,
   ChevronDown,
   ChevronUp,
+  Instagram,
+  Facebook,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -185,6 +187,22 @@ export function PlaceCard({ place }: PlaceCardProps) {
               <a href={place.url} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="h-3 w-3 mr-1" />
                 Maps
+              </a>
+            </Button>
+          )}
+          {place.instagramUrl && (
+            <Button variant="outline" size="sm" asChild>
+              <a href={place.instagramUrl} target="_blank" rel="noopener noreferrer">
+                <Instagram className="h-3 w-3 mr-1" />
+                Instagram
+              </a>
+            </Button>
+          )}
+          {place.facebookUrl && (
+            <Button variant="outline" size="sm" asChild>
+              <a href={place.facebookUrl} target="_blank" rel="noopener noreferrer">
+                <Facebook className="h-3 w-3 mr-1" />
+                Facebook
               </a>
             </Button>
           )}
