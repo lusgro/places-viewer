@@ -31,7 +31,7 @@ export function PlacesMap({ places, selectedPlaceId, onSelectPlace }: PlacesMapP
 
   if (validPlaces.length === 0) {
     return (
-      <div className="h-full flex items-center justify-center bg-muted rounded-lg">
+      <div className="h-[calc(100vh-300px)] min-h-[400px] flex items-center justify-center bg-muted rounded-lg">
         <p className="text-muted-foreground">No hay ubicaciones disponibles</p>
       </div>
     );
@@ -43,12 +43,14 @@ export function PlacesMap({ places, selectedPlaceId, onSelectPlace }: PlacesMapP
     validPlaces.reduce((sum, p) => sum + p.location.lng, 0) / validPlaces.length;
 
   return (
-    <MapContainer
-      center={[centerLat, centerLng]}
-      zoom={15}
-      className="h-full w-full rounded-lg"
-      scrollWheelZoom={true}
-    >
+    <div className="h-[calc(100vh-300px)] min-h-[400px] w-full">
+      <MapContainer
+        center={[centerLat, centerLng]}
+        zoom={13}
+        style={{ height: "100%", width: "100%" }}
+        className="rounded-lg"
+        scrollWheelZoom={true}
+      >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -131,5 +133,6 @@ export function PlacesMap({ places, selectedPlaceId, onSelectPlace }: PlacesMapP
         </Marker>
       ))}
     </MapContainer>
+    </div>
   );
 }

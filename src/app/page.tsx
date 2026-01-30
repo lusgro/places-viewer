@@ -252,7 +252,7 @@ export default function Home() {
             <PlacesTable data={filteredPlaces} />
           </TabsContent>
 
-          <TabsContent value="map" className="h-[calc(100vh-300px)] min-h-[400px]">
+          <TabsContent value="map">
             <PlacesMap places={filteredPlaces} />
           </TabsContent>
         </Tabs>
