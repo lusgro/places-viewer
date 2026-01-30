@@ -20,7 +20,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface PlaceCardProps {
   place: Place;
@@ -53,12 +53,17 @@ function StarRating({ score }: { score: number | null | undefined }) {
 
 function OpeningHoursDisplay({ hours }: { hours: Place["openingHours"] }) {
   const [expanded, setExpanded] = useState(false);
+  const [todayInfo, setTodayInfo] = useState<{ day: string; isOpen: boolean; hours: string | null } | null>(null);
+  
+  useEffect(() => {
+    if (!hours || hours.length === 0) return;
+    const today = new Date().toLocaleDateString("es-ES", { weekday: "long" }).toLowerCase();
+    const todayHours = hours.find(h => h.day.toLowerCase() === today);
+    const isOpen = todayHours ? !todayHours.hours.toLowerCase().includes("cerrado") : false;
+    setTodayInfo({ day: today, isOpen, hours: todayHours?.hours || null });
+  }, [hours]);
   
   if (!hours || hours.length === 0) return null;
-  
-  const today = new Date().toLocaleDateString("es-ES", { weekday: "long" }).toLowerCase();
-  const todayHours = hours.find(h => h.day.toLowerCase() === today);
-  const isOpen = todayHours && !todayHours.hours.toLowerCase().includes("cerrado");
   
   return (
     <div className="space-y-1">
@@ -67,11 +72,15 @@ function OpeningHoursDisplay({ hours }: { hours: Place["openingHours"] }) {
         className="flex items-center gap-1 text-sm hover:text-primary transition-colors"
       >
         <Clock className="h-4 w-4" />
-        <span className={isOpen ? "text-green-600 font-medium" : "text-red-600 font-medium"}>
-          {isOpen ? "Abierto" : "Cerrado"}
-        </span>
-        {todayHours && (
-          <span className="text-muted-foreground ml-1">· {todayHours.hours}</span>
+        {todayInfo && (
+          <>
+            <span className={todayInfo.isOpen ? "text-green-600 font-medium" : "text-red-600 font-medium"}>
+              {todayInfo.isOpen ? "Abierto" : "Cerrado"}
+            </span>
+            {todayInfo.hours && (
+              <span className="text-muted-foreground ml-1">· {todayInfo.hours}</span>
+            )}
+          </>
         )}
         {expanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
       </button>
