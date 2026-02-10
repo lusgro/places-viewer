@@ -19,6 +19,7 @@ import {
   X,
   MapPin,
   Store,
+  Download,
 } from "lucide-react";
 
 const PlacesMap = dynamic(
@@ -160,6 +161,18 @@ export default function Home() {
                   Limpiar
                 </Button>
               )}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={async () => {
+                  const { exportPlacesToExcel } = await import("@/lib/exportToExcel");
+                  exportPlacesToExcel(filteredPlaces);
+                }}
+                className="shrink-0"
+              >
+                <Download className="h-4 w-4 mr-1" />
+                Excel
+              </Button>
             </div>
           </div>
 
